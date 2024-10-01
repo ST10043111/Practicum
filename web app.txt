@@ -1,0 +1,210 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_disaster_alleviation_foundation_name": {
+            "defaultValue": "disaster-alleviation-foundation",
+            "type": "String"
+        },
+        "serverfarms_ASP_AZJHBRSGRCGPPTst10043111TER_9bbd_externalid": {
+            "defaultValue": "/subscriptions/4dd12a2f-0a9e-4b69-ba01-a9d26e10e611/resourceGroups/AZ-JHB-RSG-RCGPPT-st10043111-TER/providers/Microsoft.Web/serverfarms/ASP-AZJHBRSGRCGPPTst10043111TER-9bbd",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2023-12-01",
+            "name": "[parameters('sites_disaster_alleviation_foundation_name')]",
+            "location": "South Africa North",
+            "kind": "app",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_disaster_alleviation_foundation_name'), '-f7afg7a8bfcqh2fy.southafricanorth-01.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_disaster_alleviation_foundation_name'), '-f7afg7a8bfcqh2fy.scm.southafricanorth-01.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_ASP_AZJHBRSGRCGPPTst10043111TER_9bbd_externalid')]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "1B76CD2BE86BD2714BAC47341AFF1341FEA218B2D8146016DAECE19F59B8F4D0",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "publicNetworkAccess": "Enabled",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2023-12-01",
+            "name": "[concat(parameters('sites_disaster_alleviation_foundation_name'), '/ftp')]",
+            "location": "South Africa North",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_disaster_alleviation_foundation_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2023-12-01",
+            "name": "[concat(parameters('sites_disaster_alleviation_foundation_name'), '/scm')]",
+            "location": "South Africa North",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_disaster_alleviation_foundation_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2023-12-01",
+            "name": "[concat(parameters('sites_disaster_alleviation_foundation_name'), '/web')]",
+            "location": "South Africa North",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_disaster_alleviation_foundation_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": true,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$disaster-alleviation-foundation",
+                "scmType": "GitHubAction",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "publicNetworkAccess": "Enabled",
+                "localMySqlEnabled": true,
+                "managedServiceIdentityId": 12687,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "ipSecurityRestrictionsDefaultAction": "Allow",
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsDefaultAction": "Allow",
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2023-12-01",
+            "name": "[concat(parameters('sites_disaster_alleviation_foundation_name'), '/', parameters('sites_disaster_alleviation_foundation_name'), '-f7afg7a8bfcqh2fy.southafricanorth-01.azurewebsites.net')]",
+            "location": "South Africa North",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_disaster_alleviation_foundation_name'))]"
+            ],
+            "properties": {
+                "siteName": "disaster-alleviation-foundation",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2023-12-01",
+            "name": "[concat(parameters('sites_disaster_alleviation_foundation_name'), '/AspNetCoreRuntime.8.0.x86')]",
+            "location": "South Africa North",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_disaster_alleviation_foundation_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/siteextensions",
+            "apiVersion": "2023-12-01",
+            "name": "[concat(parameters('sites_disaster_alleviation_foundation_name'), '/websitelogs')]",
+            "location": "South Africa North",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_disaster_alleviation_foundation_name'))]"
+            ]
+        }
+    ]
+}
